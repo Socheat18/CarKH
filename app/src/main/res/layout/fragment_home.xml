@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeFragment">
+    <!-- SearchView for searching through the list -->
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Search items"
+        android:iconifiedByDefault="false"
+        android:layout_margin="10dp"
+        android:background="@drawable/custom_edittext"/>
+
+    <!-- Title above the first RecyclerView -->
+    <TextView
+        android:id="@+id/pageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchView"
+        android:text="New"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp" />
+
+    <!-- First RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pageTitle"
+        android:layout_marginTop="10dp" />
+
+    <!-- Title above the second RecyclerView -->
+    <TextView
+        android:id="@+id/pageTitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ford"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_below="@id/recyclerView"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp" />
+
+    <!-- Second RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/pageTitle2"
+        android:layout_marginTop="10dp" />
+
+</RelativeLayout>

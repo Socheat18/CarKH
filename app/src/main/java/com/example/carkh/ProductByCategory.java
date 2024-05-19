@@ -71,7 +71,13 @@ public class ProductByCategory extends RecyclerView.Adapter<ProductByCategory.Vi
         }
 
         public void bind(MyDataModel dataModel) {
-            imageView.setImageResource(dataModel.getImageResId());
+            if (!dataModel.getImageResIds().isEmpty()) {
+                imageView.setImageResource(dataModel.getImageResIds().get(0)); // Display the first image
+            } else {
+                // Handle the case where there are no images
+                // You might want to set a placeholder image or hide the ImageView
+            }
+//            imageView.setImageResource(dataModel.getImageResId());
             titleTextView.setText(dataModel.getTitle());
             descriptionTextView.setText(dataModel.getDescription());
         }

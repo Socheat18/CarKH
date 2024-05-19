@@ -37,13 +37,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MyDataModel data = dataList.get(position);
-        holder.bind(data);
+        if (dataList != null && position < dataList.size()) {
+            MyDataModel data = dataList.get(position);
+            holder.bind(data);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return dataList.size();
+        return dataList != null ? dataList.size() : 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -60,20 +62,24 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onItemClick(position);
                     }
                 }
             });
         }
 
         public void bind(MyDataModel dataModel) {
-            cardImage.setImageResource(dataModel.getImageResId());
+            if (!dataModel.getImageResIds().isEmpty()) {
+                cardImage.setImageResource(dataModel.getImageResIds().get(0)); // Display the first image
+            } else {
+                // Handle the case where there are no images
+                // You might want to set a placeholder image or hide the ImageView
+            }
             cardTitle.setText(dataModel.getTitle());
             cardDescription.setText(dataModel.getDescription());
         }
+
     }
 }

@@ -6,27 +6,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDetailFragment extends Fragment {
 
-    private ViewPager viewPager;
+    private ViewPager2 viewPager;
     private TextView productTitleTextView;
     private TextView productDescriptionTextView;
     private TextView productPriceTextView;
     private Button orderButton;
     private Button cancelButton;
-    private Button addItemButton;
+    private NumberPicker itemNumberPicker; // Changed to NumberPicker
 
     private List<Integer> imageList;
 
@@ -41,7 +42,11 @@ public class ProductDetailFragment extends Fragment {
         productPriceTextView = view.findViewById(R.id.productPriceTextView);
         orderButton = view.findViewById(R.id.orderButton);
         cancelButton = view.findViewById(R.id.cancelButton);
-        addItemButton = view.findViewById(R.id.addItemButton);
+        itemNumberPicker = view.findViewById(R.id.itemNumberPicker); // Assign to NumberPicker
+
+        // Set the minimum and maximum values for the NumberPicker
+        itemNumberPicker.setMinValue(1);
+        itemNumberPicker.setMaxValue(10); // Change this to your desired maximum value
 
         if (getArguments() != null) {
             String title = getArguments().getString("title");
@@ -49,18 +54,12 @@ public class ProductDetailFragment extends Fragment {
             double price = getArguments().getDouble("price", 0.0);
             imageList = getArguments().getIntegerArrayList("imageList");
 
-            List<Integer> imageList = new ArrayList<>();
-            imageList.add(R.drawable.odi_car); // replace with your actual drawable resource IDs
-            imageList.add(R.drawable.odi_car);
-            imageList.add(R.drawable.odi_car);
-
-
             productTitleTextView.setText(title);
             productDescriptionTextView.setText(description);
             productPriceTextView.setText(String.format("Price: $%.2f", price));
 
             if (imageList != null && !imageList.isEmpty()) {
-                setupViewPager(imageList);
+                setupViewPager();
             } else {
                 Toast.makeText(getContext(), "No images to display", Toast.LENGTH_SHORT).show();
             }
@@ -69,7 +68,9 @@ public class ProductDetailFragment extends Fragment {
         orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Order placed", Toast.LENGTH_SHORT).show();
+                int quantity = itemNumberPicker.getValue(); // Get selected quantity
+                // Perform order processing with selected quantity
+                Toast.makeText(getContext(), "Order placed for " + quantity + " items", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -81,22 +82,15 @@ public class ProductDetailFragment extends Fragment {
             }
         });
 
-        addItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Item added", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         return view;
     }
 
-    private void setupViewPager(List<Integer> imageList) {
+    private void setupViewPager() {
         ImagePagerAdapter adapter = new ImagePagerAdapter(imageList);
         viewPager.setAdapter(adapter);
     }
 
-    private class ImagePagerAdapter extends PagerAdapter {
+    private class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.ImageViewHolder> {
 
         private List<Integer> images;
 
@@ -104,29 +98,30 @@ public class ProductDetailFragment extends Fragment {
             this.images = images;
         }
 
+        @NonNull
         @Override
-        public int getCount() {
+        public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image, parent, false);
+            return new ImageViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
+            holder.imageView.setImageResource(images.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
             return images.size();
         }
 
-        @Override
-        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == object;
-        }
+        public class ImageViewHolder extends RecyclerView.ViewHolder {
+            ImageView imageView;
 
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            ImageView imageView = new ImageView(getContext());
-            imageView.setImageResource(images.get(position));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            container.addView(imageView);
-            return imageView;
-        }
-
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            container.removeView((ImageView) object);
+            public ImageViewHolder(@NonNull View itemView) {
+                super(itemView);
+                imageView = itemView.findViewById(R.id.imageView);
+            }
         }
     }
 }

@@ -1,17 +1,17 @@
 package com.example.carkh;
 
+import java.util.List;
+
 public class MyDataModel {
     private String title;
     private String description;
-    private int imageResId;
+    private List<Integer> imageResIds;
+    private float price;
 
-
-    private  float price;
-
-    public MyDataModel(String title, String description, int imageResId, float price) {
+    public MyDataModel(String title, String description, List<Integer> imageResIds, float price) {
         this.title = title;
         this.description = description;
-        this.imageResId = imageResId;
+        this.imageResIds = imageResIds;
         this.price = price;
     }
 
@@ -23,9 +23,11 @@ public class MyDataModel {
         return description;
     }
 
-    public int getImageResId() {
-        return imageResId;
+    public List<Integer> getImageResIds() {
+        return imageResIds;
     }
 
-    public float getPrice() {return price;}
+    public float getPrice() {
+        return price;
+    }
 }

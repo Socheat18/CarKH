@@ -1,5 +1,8 @@
 package com.example.carkh;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +17,11 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private List<MyDataModel> dataList;
+    private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public MyAdapter(List<MyDataModel> dataList) {
+    public MyAdapter(Context context, List<MyDataModel> dataList) {
+        this.context = context;
         this.dataList = dataList;
     }
 
@@ -32,7 +37,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_item, parent, false);
-        return new ViewHolder(view, onItemClickListener);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -48,26 +53,61 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return dataList != null ? dataList.size() : 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView cardImage;
         TextView cardTitle;
         TextView cardDescription;
+        TextView productPrice;
+        private ImageView addCart;
 
-        public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             cardImage = itemView.findViewById(R.id.card_image);
             cardTitle = itemView.findViewById(R.id.card_title);
             cardDescription = itemView.findViewById(R.id.card_description);
+            productPrice = itemView.findViewById(R.id.productPriceTextView);
+            addCart = itemView.findViewById(R.id.addCartButton);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && listener != null) {
-                        listener.onItemClick(position);
+                    if (position != RecyclerView.NO_POSITION && onItemClickListener != null) {
+                        onItemClickListener.onItemClick(position);
                     }
                 }
             });
+
+            addCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && onItemClickListener != null) {
+                        MyDataModel dataModel = dataList.get(position);
+                        if (isUserLoggedIn()) {
+                            addToCart(dataModel);
+                        } else {
+                            navigateToLogin();
+                        }
+                    }
+                }
+            });
+        }
+
+        private boolean isUserLoggedIn() {
+            SharedPreferences sharedPref = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+            return sharedPref.getBoolean("logged_in", false);
+        }
+
+        private void navigateToLogin() {
+            Intent intent = new Intent(context, LoginActivity.class);
+            context.startActivity(intent);
+        }
+
+        private void addToCart(MyDataModel dataModel) {
+            // Implement the logic to add the item to the cart
+            // For example, you can store the item information in a database or shared preferences
+            // This is a placeholder for your cart-adding logic
         }
 
         public void bind(MyDataModel dataModel) {
@@ -79,7 +119,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             }
             cardTitle.setText(dataModel.getTitle());
             cardDescription.setText(dataModel.getDescription());
+            productPrice.setText(String.format("$%.2f", dataModel.getPrice()));
         }
-
     }
 }

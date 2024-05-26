@@ -1,12 +1,17 @@
 package com.example.carkh;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,9 +32,10 @@ public class ProductDetailFragment extends Fragment {
     private TextView productPriceTextView;
     private Button orderButton;
     private Button cancelButton;
-    private NumberPicker itemNumberPicker; // Changed to NumberPicker
 
     private List<Integer> imageList;
+
+    private float totalPrice;
 
     @Nullable
     @Override
@@ -42,21 +48,70 @@ public class ProductDetailFragment extends Fragment {
         productPriceTextView = view.findViewById(R.id.productPriceTextView);
         orderButton = view.findViewById(R.id.orderButton);
         cancelButton = view.findViewById(R.id.cancelButton);
-        itemNumberPicker = view.findViewById(R.id.itemNumberPicker); // Assign to NumberPicker
 
-        // Set the minimum and maximum values for the NumberPicker
-        itemNumberPicker.setMinValue(1);
-        itemNumberPicker.setMaxValue(10); // Change this to your desired maximum value
+        Spinner spinner = view.findViewById(R.id.SpinnerItem);
+        Spinner spinner2 = view.findViewById(R.id.SpinnerItem2);
+
+        ArrayList<String> colorList = new ArrayList<>();
+        colorList.add("Blue");
+        colorList.add("Red");
+        colorList.add("Yellow");
+        colorList.add("White");
+
+        ArrayAdapter<String> colorAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, colorList);
+        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(colorAdapter);
+
+        ArrayList<String> quantityList = new ArrayList<>();
+        quantityList.add("1");
+        quantityList.add("2");
+        quantityList.add("3");
+        quantityList.add("4");
+
+        ArrayAdapter<String> quantityAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, quantityList);
+        quantityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(quantityAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getContext(), "Selected Item: " + item, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getContext(), "Selected Item: " + item, Toast.LENGTH_SHORT).show();
+
+                float price = getArguments().getFloat("price", 0.0F);
+                int quantity = Integer.parseInt(item);
+                totalPrice = price * quantity;
+                productPriceTextView.setText(String.format("Total Price: $%.2f", totalPrice));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
 
         if (getArguments() != null) {
             String title = getArguments().getString("title");
             String description = getArguments().getString("description");
-            double price = getArguments().getDouble("price", 0.0);
+            float price = getArguments().getFloat("price", 0.0F);
             imageList = getArguments().getIntegerArrayList("imageList");
 
             productTitleTextView.setText(title);
             productDescriptionTextView.setText(description);
-            productPriceTextView.setText(String.format("Price: $%.2f", price));
+            productPriceTextView.setText(String.format("Price: $%.2f", price));  // Initial price display
 
             if (imageList != null && !imageList.isEmpty()) {
                 setupViewPager();
@@ -68,16 +123,17 @@ public class ProductDetailFragment extends Fragment {
         orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int quantity = itemNumberPicker.getValue(); // Get selected quantity
-                // Perform order processing with selected quantity
-                Toast.makeText(getContext(), "Order placed for " + quantity + " items", Toast.LENGTH_SHORT).show();
+                if (isUserLoggedIn()) {
+                    placeOrder();
+                } else {
+                    navigateToLogin();
+                }
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate back or perform cancel operation
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
@@ -88,6 +144,20 @@ public class ProductDetailFragment extends Fragment {
     private void setupViewPager() {
         ImagePagerAdapter adapter = new ImagePagerAdapter(imageList);
         viewPager.setAdapter(adapter);
+    }
+
+    private boolean isUserLoggedIn() {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        return sharedPref.getBoolean("logged_in", false);
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+    }
+
+    private void placeOrder() {
+        Toast.makeText(getContext(), "Order placed for $" + totalPrice, Toast.LENGTH_SHORT).show();
     }
 
     private class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.ImageViewHolder> {
@@ -125,3 +195,4 @@ public class ProductDetailFragment extends Fragment {
         }
     }
 }
+

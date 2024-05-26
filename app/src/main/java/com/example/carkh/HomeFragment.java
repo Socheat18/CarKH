@@ -1,10 +1,13 @@
 package com.example.carkh;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,10 +37,14 @@ public class HomeFragment extends Fragment {
     private Runnable runnable;
     private int currentPage = 0;
 
+    private ImageView moreButton;
+    private ImageView moreButton2;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
 
         // Initialize ViewPager2 and TabLayout
         viewPager = view.findViewById(R.id.viewPager);
@@ -64,6 +71,32 @@ public class HomeFragment extends Fragment {
 
         // Set up adapters
         setupAdapters();
+
+        // Initialize and set OnClickListener for "See More" buttons
+        moreButton = view.findViewById(R.id.moreButton);
+        moreButton2 = view.findViewById(R.id.moreButton2);
+
+        moreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Replace the current fragment with the LatestFragment
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new LatestFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        moreButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Replace the current fragment with the LatestFragment
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new PopularFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         return view;
     }
@@ -138,16 +171,15 @@ public class HomeFragment extends Fragment {
         categoryList.add(new MyDataModel("Category 5", "Description E", imageIdsCategory5, 20.20F));
     }
 
-
     private void setupAdapters() {
-        adapter = new MyAdapter(dataList);
+        adapter = new MyAdapter(getContext(), dataList);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(position -> {
             MyDataModel dataModel = dataList.get(position);
             openProductDetail(dataModel);
         });
 
-        adapter2 = new ProductByCategory(categoryList);
+        adapter2 = new ProductByCategory(getContext(), categoryList);  // Pass context here
         recyclerView2.setAdapter(adapter2);
         adapter2.setOnItemClickListener(position -> {
             MyDataModel dataModel = categoryList.get(position);
@@ -168,7 +200,6 @@ public class HomeFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
 
     @Override
     public void onDestroyView() {

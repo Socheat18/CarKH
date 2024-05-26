@@ -15,4 +15,11 @@ public class AboutFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_about, container, false);
     }
+
+    public void onBackButtonClicked(View view) {
+        // You can call getActivity() to get the hosting Activity
+        if (getActivity() != null) {
+            getActivity().onBackPressed();
+        }
+    }
 }

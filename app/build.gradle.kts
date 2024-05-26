@@ -45,4 +45,8 @@ dependencies {
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
     implementation(libs.room.ktx)
+
+    // ViewPager2 dependency
+    implementation(libs.viewpager2)
+
 }

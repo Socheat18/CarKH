@@ -48,10 +48,10 @@ public class HomePageActivity extends AppCompatActivity  implements NavigationVi
                 selectedFragment = new HomeFragment();
             } else if (item.getItemId() == R.id.category) {
                 selectedFragment = new CategoryFragment();
-            } else if (item.getItemId() == R.id.subscriptions) {
-                selectedFragment = new SubscriptionFragment();
-            } else if (item.getItemId() == R.id.library) {
-                selectedFragment = new LibraryFragment();
+            } else if (item.getItemId() == R.id.favorite) {
+                selectedFragment = new FavoriteFragment();
+            } else if (item.getItemId() == R.id.chat) {
+                selectedFragment = new ChatFragment();
             }
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();

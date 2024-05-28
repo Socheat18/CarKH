@@ -3,6 +3,7 @@ package com.example.carkh;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class ProductByCategory extends RecyclerView.Adapter<ProductByCategory.Vi
         TextView descriptionTextView;
         TextView productPrice;
         private ImageView addCart;
+        private ImageView favoriteButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +67,7 @@ public class ProductByCategory extends RecyclerView.Adapter<ProductByCategory.Vi
             descriptionTextView = itemView.findViewById(R.id.card_description);
             productPrice = itemView.findViewById(R.id.productPriceTextView);
             addCart = itemView.findViewById(R.id.addCartButton);
+            favoriteButton = itemView.findViewById(R.id.favoriteButton);
         }
 
         public void bind(MyDataModel dataModel, final OnItemClickListener listener, final Context context) {
@@ -90,6 +93,12 @@ public class ProductByCategory extends RecyclerView.Adapter<ProductByCategory.Vi
                         }
                     }
                 }
+            });
+
+            favoriteButton.setOnClickListener(v -> {
+                boolean isSelected = v.isSelected();
+                v.setSelected(!isSelected);
+                ((ImageView) v).setColorFilter(isSelected ? Color.BLACK : Color.RED);
             });
 
             addCart.setOnClickListener(new View.OnClickListener() {

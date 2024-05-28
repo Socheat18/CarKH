@@ -1,13 +1,12 @@
 package com.example.carkh;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,7 +44,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-
         // Initialize ViewPager2 and TabLayout
         viewPager = view.findViewById(R.id.viewPager);
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
@@ -76,26 +74,20 @@ public class HomeFragment extends Fragment {
         moreButton = view.findViewById(R.id.moreButton);
         moreButton2 = view.findViewById(R.id.moreButton2);
 
-        moreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Replace the current fragment with the LatestFragment
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new LatestFragment())
-                        .addToBackStack(null)
-                        .commit();
-            }
+        moreButton.setOnClickListener(v -> {
+            // Replace the current fragment with the LatestFragment
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new LatestFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
 
-        moreButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Replace the current fragment with the LatestFragment
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new PopularFragment())
-                        .addToBackStack(null)
-                        .commit();
-            }
+        moreButton2.setOnClickListener(v -> {
+            // Replace the current fragment with the PopularFragment
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new PopularFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
 
         return view;

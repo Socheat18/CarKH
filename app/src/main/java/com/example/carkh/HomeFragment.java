@@ -126,11 +126,11 @@ public class HomeFragment extends Fragment {
 
         List<Integer> imageIds2 = new ArrayList<>();
         imageIds2.add(R.drawable.super_car);
-        dataList.add(new MyDataModel("Title 2", "Download over 100 car png pictures for free on Unsplash. Browse high-quality photos of vehicles, wheels, roads, and more for commercial use.", imageIds2, 12.4F));
+        dataList.add(new MyDataModel("Super Car", "Download over 100 car png pictures for free on Unsplash. Browse high-quality photos of vehicles, wheels, roads, and more for commercial use.", imageIds2, 12.4F));
 
         List<Integer> imageIds3 = new ArrayList<>();
         imageIds3.add(R.drawable.super_car_odi);
-        dataList.add(new MyDataModel("Title 3", "Download over 190000 Cars PNG images for your design ideas from Pngtree, the largest collection of Cars PNG resources.", imageIds3, 20.20F));
+        dataList.add(new MyDataModel("Odi Super car", "Download over 190000 Cars PNG images for your design ideas from Pngtree, the largest collection of Cars PNG resources.", imageIds3, 20.20F));
 
         List<Integer> imageIds4 = new ArrayList<>();
         imageIds4.add(R.drawable.odi_car);
@@ -144,15 +144,15 @@ public class HomeFragment extends Fragment {
         categoryList = new ArrayList<>();
         List<Integer> imageIdsCategory1 = new ArrayList<>();
         imageIdsCategory1.add(R.drawable.odi_car);
-        categoryList.add(new MyDataModel("Category 1", "Download over 100 car png pictures for free on Unsplash. Browse high-quality photos of vehicles, wheels, roads, and more for commercial use.", imageIdsCategory1, 20.20F));
+        categoryList.add(new MyDataModel("Odi master 2020", "Download over 100 car png pictures for free on Unsplash. Browse high-quality photos of vehicles, wheels, roads, and more for commercial use.", imageIdsCategory1, 20.20F));
 
         List<Integer> imageIdsCategory2 = new ArrayList<>();
         imageIdsCategory2.add(R.drawable.super_car);
-        categoryList.add(new MyDataModel("Category 2", "Download over 190000 Cars PNG images for your design ideas from Pngtree, the largest collection of Cars PNG resources.", imageIdsCategory2, 20.20F));
+        categoryList.add(new MyDataModel("Maslaren Super Car", "Download over 190000 Cars PNG images for your design ideas from Pngtree, the largest collection of Cars PNG resources.", imageIdsCategory2, 20.20F));
 
         List<Integer> imageIdsCategory3 = new ArrayList<>();
         imageIdsCategory3.add(R.drawable.super_car_odi);
-        categoryList.add(new MyDataModel("Category 3", "You can download free Car PNG images with transparent backgrounds from the largest collection on Pngtree. With these Car PNG images, ", imageIdsCategory3, 20.20F));
+        categoryList.add(new MyDataModel("Odi Super car", "You can download free Car PNG images with transparent backgrounds from the largest collection on Pngtree. With these Car PNG images, ", imageIdsCategory3, 20.20F));
 
         List<Integer> imageIdsCategory4 = new ArrayList<>();
         imageIdsCategory4.add(R.drawable.odi_car);
